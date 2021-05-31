@@ -1,0 +1,23 @@
+.box{
+    background: blueviolet;
+    position: absolute;left: 0;top: 0;
+    width: 100vw;height: 100vh;overflow: auto;
+    -webkit-overflow-scrolling: touch;box-sizing: border-box;
+    &-btn{
+        position: fixed;right: 5vw;bottom: 5vw;width: 15vw;height: 15vw;border-radius: 100%;background: lightseagreen;color: white;font-size: 4vw;
+        text-align: center;line-height: 15vw;z-index: 2;
+    }
+    div{
+        box-sizing: border-box;
+    }
+    &-scrollView{
+        overflow: hidden;
+        &-child{
+            width: 100vw;box-sizing: border-box;
+            padding: 0 5vw;box-shadow: 0 2px #eee;line-height: 15vw;height: 15vw;
+            >div{
+                float: left;margin-right: 20vw
+            }
+        }
+    }
+}
