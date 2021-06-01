@@ -1,8 +1,9 @@
 import React from "react";
 require("./index.scss");
 
-const list: any = new Array(200).fill(0).map((_, idx) => {
+const list: any = new Array(2000).fill(0).map((_, idx) => {
   return {
+    id: idx + 1,
     name: `张${idx + 1}`,
     age: idx + 20,
     sex: idx % 2 === 0 ? "男" : "女",
@@ -126,7 +127,7 @@ export default function VScroll({ size = 20, allList = list }) {
         )}
         {defaultList.length > 0 &&
           defaultList.map((item: any, index: number) => (
-            <div key={index} className={`box-scrollView-child item${index}`}>
+            <div key={item.id} className={`box-scrollView-child item${index}`}>
               <div>{item.name}</div>
               <div>{item.age}</div>
               <div>{item.sex}</div>
