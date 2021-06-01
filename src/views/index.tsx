@@ -26,9 +26,10 @@ export default function VScroll({ size = 20, allList = list }) {
           // console.log(`第 ${indexPiece} 个区间,第 ${indexItem} 个item`);
           // 拆分两组视图。下去的和即将下去的
           if (indexPiece !== indexReducer[0] || indexItem !== indexReducer[1]) {
+            // 此时发现了区间或者某项item滚过去了，需要记录下新的区间，
+            // 方便下次比较，判断是否需要重绘局部virtual dom
             indexReducer[0] = indexPiece;
             indexReducer[1] = indexItem;
-
             const arr = new Array(size).fill(0).map((item, idx) => idx);
             var down = arr.slice(0, indexItem);
             var will_down = arr.slice(indexItem);
