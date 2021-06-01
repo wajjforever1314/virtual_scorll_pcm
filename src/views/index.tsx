@@ -14,57 +14,64 @@ export default function VScroll({ size = 20, allList = list }) {
     (childHeight: number, groupSize: number, arrDefault: any[]) => {
       const box: React.ReactDOM | any = document.querySelector(".box");
       if (box) {
+        // 记录上一次最近的滚动区间，用于减少重绘次数
+        const indexReducer = [0, 0];
         box.onscroll = function () {
           const scrollTop = box.scrollTop;
           // 滚到了第几个区间
           const indexPiece = Math.floor(scrollTop / groupSize);
           // 滚到该区间的哪一个item
-          const indexTtem = Math.floor((scrollTop % groupSize) / childHeight);
+          const indexItem = Math.floor((scrollTop % groupSize) / childHeight);
           // console.log("滚动位移", scrollTop, childHeight);
-          // console.log(`第 ${indexPiece} 个区间,第 ${indexTtem} 个item`);
+          // console.log(`第 ${indexPiece} 个区间,第 ${indexItem} 个item`);
           // 拆分两组视图。下去的和即将下去的
-          const arr = new Array(size).fill(0).map((item, idx) => idx);
-          var down = arr.slice(0, indexTtem);
-          var will_down = arr.slice(indexTtem);
-          // console.log("down", down, "will_down", will_down);
-          const dl = [...arrDefault];
-          down.forEach((item, idx) => {
-            const itemDom: React.ReactDOM | any = document.querySelector(
-              `.item${item}`
-            );
-            // console.log("itemDomdown", itemDom);
-            const number = (indexPiece + 1) * size + item;
-            if (itemDom && number < allList.length) {
-              itemDom.style.transform = `translateY(${
-                groupSize * (indexPiece + 1)
-              }px)`;
-              // 定位，确定移动的是整体的第几个数据
-              // console.log("number", number);
-              // console.log("item", item);
-              // console.log("arrDefault", arrDefault);
-              dl[Number(item)] = allList[number];
-              // console.log("dldown", dl, allList, number);
-            }
-          });
-          will_down.forEach((item, idx) => {
-            const itemDom: React.ReactDOM | any = document.querySelector(
-              `.item${item}`
-            );
-            // console.log("itemDomwill_down", itemDom);
-            const number = indexPiece * size + item;
-            if (itemDom && number < allList.length) {
-              itemDom.style.transform = `translateY(${
-                groupSize * indexPiece
-              }px)`;
-              // 定位，确定移动的是整体的第几个数据
-              // console.log('number',number)
-              // console.log('item',item)
-              // console.log('vm.default_list',vm.default_list)
-              dl[Number(item)] = allList[number];
-              // console.log("dlwilldown", dl, allList, number);
-            }
-          });
-          setDefaultList(dl);
+          if (indexPiece !== indexReducer[0] || indexItem !== indexReducer[1]) {
+            indexReducer[0] = indexPiece;
+            indexReducer[1] = indexItem;
+
+            const arr = new Array(size).fill(0).map((item, idx) => idx);
+            var down = arr.slice(0, indexItem);
+            var will_down = arr.slice(indexItem);
+            // console.log("down", down, "will_down", will_down);
+            const dl = [...arrDefault];
+            down.forEach((item, idx) => {
+              const itemDom: React.ReactDOM | any = document.querySelector(
+                `.item${item}`
+              );
+              // console.log("itemDomdown", itemDom);
+              const number = (indexPiece + 1) * size + item;
+              if (itemDom && number < allList.length) {
+                itemDom.style.transform = `translateY(${
+                  groupSize * (indexPiece + 1)
+                }px)`;
+                // 定位，确定移动的是整体的第几个数据
+                // console.log("number", number);
+                // console.log("item", item);
+                // console.log("arrDefault", arrDefault);
+                dl[Number(item)] = allList[number];
+                // console.log("dldown", dl, allList, number);
+              }
+            });
+            will_down.forEach((item, idx) => {
+              const itemDom: React.ReactDOM | any = document.querySelector(
+                `.item${item}`
+              );
+              // console.log("itemDomwill_down", itemDom);
+              const number = indexPiece * size + item;
+              if (itemDom && number < allList.length) {
+                itemDom.style.transform = `translateY(${
+                  groupSize * indexPiece
+                }px)`;
+                // 定位，确定移动的是整体的第几个数据
+                // console.log('number',number)
+                // console.log('item',item)
+                // console.log('vm.default_list',vm.default_list)
+                dl[Number(item)] = allList[number];
+                // console.log("dlwilldown", dl, allList, number);
+              }
+            });
+            setDefaultList(dl);
+          }
         };
       }
     },
